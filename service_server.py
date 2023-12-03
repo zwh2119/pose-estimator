@@ -1,23 +1,16 @@
+import json
 import os
-import random
+
 import shutil
 import time
-import contextlib
-import threading
-import asyncio
-
-import base64
 
 import cv2
 from fastapi import FastAPI, UploadFile, File, Form
 from fastapi.routing import APIRoute
 from starlette.responses import JSONResponse
-from starlette.requests import Request
 from fastapi.middleware.cors import CORSMiddleware
-import uvicorn
 
-from car_detection import CarDetection
-import field_codec_utils
+from face_alignment_cnn import FaceAlignmentCNN
 
 
 class ServiceServer:
@@ -32,9 +25,10 @@ class ServiceServer:
                      ),
         ], log_level='trace', timeout=6000)
 
-        self.estimator = CarDetection({
-            'weights': 'yolov5s.pt',
-            # 'device': 'cpu'
+        self.estimator = FaceAlignmentCNN({
+            'lite_version': True,
+            'model_path': 'models/hopenet_lite_6MB.pkl',
+            'batch_size': 1,
             'device': 'cuda:0'
         })
 
@@ -50,6 +44,9 @@ class ServiceServer:
             shutil.copyfileobj(file.file, buffer)
             del file
 
+        data = json.loads(data)
+        boxes = data['result']
+
         content = []
         video_cap = cv2.VideoCapture(tmp_path)
         while True:
@@ -61,7 +58,7 @@ class ServiceServer:
         start = time.time()
         result = await self.estimator(content)
         end = time.time()
-        print(f'process time:{end-start}s')
+        print(f'process time:{end - start}s')
         assert type(result) is dict
 
         return result
