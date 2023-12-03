@@ -1,6 +1,4 @@
-import sys
 
-sys.path.append('..')
 import numpy as np
 import torch
 from torch.autograd import Variable
@@ -10,8 +8,8 @@ import torchvision
 import torch.nn.functional as F
 from PIL import Image
 
-from . import hopenet
-from . import hopenetlite_v2
+import hopenet
+import hopenetlite_v2
 
 import os
 
