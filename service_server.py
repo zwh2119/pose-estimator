@@ -44,8 +44,7 @@ class ServiceServer:
             shutil.copyfileobj(file.file, buffer)
             del file
 
-        data = json.loads(data)
-        boxes = data['result']
+        boxes = json.loads(data)
 
         content = []
         video_cap = cv2.VideoCapture(tmp_path)

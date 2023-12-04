@@ -20,7 +20,7 @@ def use_gpu(dev):
     if dev[:4] == 'cuda':
         if torch.cuda.is_available():
             ret = True
-            print('using gpu ({})'.format(dev))
+            # print('using gpu ({})'.format(dev))
         else:
             print('torch.cuda.is_available() == False')
     else:
@@ -74,7 +74,7 @@ class FaceAlignmentCNN:
         # for loading model at relative path
         os.chdir(ori_dir)
 
-    def __call__(self, images, boxes):
+    async def __call__(self, images, boxes):
 
         output_ctx = {'result': [], 'probs': [], 'parameters': {}}
         output_ctx['parameters']['total'] = []
