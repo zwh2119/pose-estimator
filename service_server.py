@@ -54,6 +54,7 @@ class ServiceServer:
                 break
             content.append(frame)
         os.remove(tmp_path)
+
         start = time.time()
         result = await self.estimator(content, boxes)
         end = time.time()
