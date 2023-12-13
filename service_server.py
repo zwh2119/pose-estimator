@@ -12,6 +12,8 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from face_alignment_cnn import FaceAlignmentCNN
 
+from log import LOGGER
+
 
 class ServiceServer:
 
@@ -58,7 +60,7 @@ class ServiceServer:
         start = time.time()
         result = await self.estimator(content, boxes)
         end = time.time()
-        print(f'process time:{end - start}s')
+        LOGGER.debug(f'process time:{end - start}s')
         assert type(result) is dict
 
         return result
